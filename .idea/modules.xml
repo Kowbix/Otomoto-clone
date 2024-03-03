@@ -3,7 +3,6 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/Otomoto.iml" filepath="$PROJECT_DIR$/.idea/Otomoto.iml" />
-      <module fileurl="file://$PROJECT_DIR$/otomoto-clon/otomoto-clon.iml" filepath="$PROJECT_DIR$/otomoto-clon/otomoto-clon.iml" />
     </modules>
   </component>
 </project>
