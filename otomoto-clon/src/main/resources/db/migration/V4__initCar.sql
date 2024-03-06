@@ -30,7 +30,7 @@ CREATE TABLE if not exists cars (
     FOREIGN KEY (transmission_id) REFERENCES transmissions(id)
 );
 
-CREATE TABLE if not exists image (
+CREATE TABLE if not exists images (
     id SERIAL PRIMARY KEY,
     url VARCHAR(255) NOT NULL,
     car_id INT REFERENCES cars(id)
