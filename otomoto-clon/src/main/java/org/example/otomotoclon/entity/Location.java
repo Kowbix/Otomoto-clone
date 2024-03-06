@@ -11,22 +11,20 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "generations")
-public class Generation {
+@Table(name = "locations")
+public class Location {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private String name;
+    @Column(name = "city_name")
+    private String cityName;
     @ManyToOne(
             optional = false,
             fetch = FetchType.LAZY,
-            cascade = CascadeType.ALL
+            cascade = CascadeType.DETACH
     )
-    @JoinColumn(name = "model_id")
-    private Model model;
-    @Column(name = "start_production_year")
-    private int startProductionYear;
-    @Column(name = "end_production_year")
-    private int endProductionYear;
+    @JoinColumn(name = "voivodeship_id")
+    private Voivodeship voivodeship;
+
 }
