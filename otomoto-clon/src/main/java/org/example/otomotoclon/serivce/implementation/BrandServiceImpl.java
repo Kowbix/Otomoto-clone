@@ -10,6 +10,7 @@ import org.example.otomotoclon.repository.BrandRepository;
 import org.example.otomotoclon.serivce.BrandService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -26,6 +27,7 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
+    @Transactional
     public void create(BrandDTO brandDTO) throws ObjectExistInDBException {
         brandRepository.findBrandByName(brandDTO.getName()).ifPresent(value -> {
             throw new ObjectExistInDBException("Brand exists in database with given name");
@@ -36,8 +38,9 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    public Brand getBrandByName(String name) {
-        return brandRepository.findBrandByName(name).orElseThrow(() -> new ObjectDontExistInDBException("Brand do not exists in database"));
+    public Brand getBrandByName(String name) throws ObjectDontExistInDBException {
+        return brandRepository.findBrandByName(name)
+                .orElseThrow(() -> new ObjectDontExistInDBException("Brand does not exist in the database"));
     }
 
     @Override

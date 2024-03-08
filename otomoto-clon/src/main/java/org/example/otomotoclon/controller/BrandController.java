@@ -23,7 +23,7 @@ public class BrandController {
         try {
             brandService.create(brandDTO);
         } catch (ObjectExistInDBException e) {
-            return ResponseEntity.status(400).body(new Response("Brand exist in database", HttpStatus.BAD_REQUEST.value()));
+            return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
         return ResponseEntity.ok(new Response("Brand saved", HttpStatus.OK.value()));
     }

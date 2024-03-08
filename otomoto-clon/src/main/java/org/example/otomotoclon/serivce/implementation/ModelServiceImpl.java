@@ -52,7 +52,7 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public Model getModelByName(String name) {
+    public Model getModelByName(String name) throws ObjectDontExistInDBException{
         return modelRepository.findModelByName(name)
                 .orElseThrow(() -> new ObjectDontExistInDBException("Model does not exist in the database"));
     }

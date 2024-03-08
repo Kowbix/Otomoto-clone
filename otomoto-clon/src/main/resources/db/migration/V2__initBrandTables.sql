@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS generations (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     model_id BIGINT,
-    start_production_year INT,
-    end_production_year INT,
+    start_production_year INT NULL,
+    end_production_year INT NULL,
     FOREIGN KEY (model_id) REFERENCES models(id)
 );
