@@ -56,9 +56,4 @@ public class GenerationServiceImpl implements GenerationService {
                         .collect(Collectors.toList())
         );
     }
-
-    @Override
-    public Generation getGenerationByName(String name) {
-        return null;
-    }
 }

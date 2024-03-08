@@ -10,5 +10,5 @@ public interface GenerationService {
 
     void create(GenerationDTO generationDTO);
     ResponseEntity<List<GenerationDTO>> getGenerationsByModelName(String model);
-    Generation getGenerationByName(String name);
+
 }
