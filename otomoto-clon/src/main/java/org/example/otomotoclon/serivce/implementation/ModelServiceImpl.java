@@ -21,7 +21,7 @@ public class ModelServiceImpl implements ModelService {
 
     private final ModelRepository modelRepository;
     private final BrandService brandService;
-    private ModelMapper modelMapper;
+    private final ModelMapper modelMapper;
 
     public ModelServiceImpl(ModelRepository modelRepository, BrandService brandService, ModelMapper modelMapper) {
         this.modelRepository = modelRepository;

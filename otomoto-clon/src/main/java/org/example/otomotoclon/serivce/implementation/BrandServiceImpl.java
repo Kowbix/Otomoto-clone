@@ -19,7 +19,7 @@ import java.util.stream.Collectors;
 public class BrandServiceImpl implements BrandService {
 
     private final BrandRepository brandRepository;
-    private BrandMapper brandMapper;
+    private final BrandMapper brandMapper;
 
     public BrandServiceImpl(BrandRepository brandRepository, BrandMapper brandMapper) {
         this.brandRepository = brandRepository;
@@ -27,7 +27,6 @@ public class BrandServiceImpl implements BrandService {
     }
 
     @Override
-    @Transactional
     public void create(BrandDTO brandDTO) throws ObjectExistInDBException {
         brandRepository.findBrandByName(brandDTO.getName()).ifPresent(value -> {
             throw new ObjectExistInDBException("Brand exists in database with given name");

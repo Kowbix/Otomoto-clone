@@ -22,7 +22,7 @@ public class GenerationServiceImpl implements GenerationService {
 
     private final GenerationRepository generationRepository;
     private final ModelService modelService;
-    private GenerationMapper generationMapper;
+    private final GenerationMapper generationMapper;
 
     public GenerationServiceImpl(GenerationRepository generationRepository,
                                  ModelService modelService,
