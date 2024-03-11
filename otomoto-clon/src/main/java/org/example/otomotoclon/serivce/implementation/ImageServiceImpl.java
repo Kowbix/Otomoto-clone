@@ -11,33 +11,32 @@ import org.springframework.web.multipart.MultipartFile;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ImageServiceImpl implements ImageService {
 
 
     @Value("${aws.s3.bucket.images.name}")
-    private String bucketName;
+    private String BUCKET_NAME;
 
     @Value("${aws.s3.bucket.images.path}")
-    private String imagePath;
+    private String IMAGE_PATH;
 
     private final S3Service s3Service;
+
+    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
 
     public ImageServiceImpl(S3Service s3Service) {
         this.s3Service = s3Service;
     }
-
-    private static final List<String> ALLOWED_EXTENSIONS = Arrays.asList("jpg", "jpeg", "png");
 
     @Override
     public List<String> uploadImages(List<MultipartFile> imageFiles) throws InvalidFileExtension {
         List<String> imageUrls = new ArrayList<>();
         for(MultipartFile image : imageFiles) {
             try {
-                String filename = uploadImage(image);
-                imageUrls.add(filename);
+                String imageUrl = uploadImage(image);
+                imageUrls.add(imageUrl);
             } catch (InvalidFileExtension e) {
                 throw new InvalidFileExtension("Invalid image extension - " + image.getOriginalFilename());
             } catch (Exception e) {
@@ -56,7 +55,7 @@ public class ImageServiceImpl implements ImageService {
         if(!isImageFile(imageFile)) {
             throw new InvalidFileExtension("Invalid image extension");
         }
-        String imageName = s3Service.uploadFile(bucketName, imageFile);
+        String imageName = s3Service.uploadFile(BUCKET_NAME, imageFile);
         return getImageUrl(imageName);
     }
 
@@ -70,6 +69,6 @@ public class ImageServiceImpl implements ImageService {
     }
 
     private String getImageUrl(String imageName) {
-        return imagePath + "/" + imageName;
+        return IMAGE_PATH + "/" + imageName;
     }
 }
