@@ -1,16 +1,14 @@
 package org.example.otomotoclon.serivce.implementation;
 
-import lombok.RequiredArgsConstructor;
 import org.example.otomotoclon.dto.BrandDTO;
 import org.example.otomotoclon.entity.Brand;
 import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.exception.ObjectExistInDBException;
-import org.example.otomotoclon.translator.BrandMapper;
 import org.example.otomotoclon.repository.BrandRepository;
 import org.example.otomotoclon.serivce.BrandService;
+import org.example.otomotoclon.translator.BrandMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
