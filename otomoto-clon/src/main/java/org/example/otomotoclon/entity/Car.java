@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -66,7 +67,7 @@ public class Car {
     private String vin;
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
-    private Set<Image> images;
+    private List<Image> images;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "engine_id", referencedColumnName = "id")
     private Engine engine;

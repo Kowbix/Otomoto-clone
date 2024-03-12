@@ -10,8 +10,8 @@ import java.util.List;
 
 public interface BodyworkTypeService {
 
-    void create(BodyworkTypeDTO bodyworkTypeDTO) throws ObjectExistInDBException;
-    BodyworkType getBodyworkTypeByName(String name) throws ObjectDontExistInDBException;
+    void create(BodyworkTypeDTO bodyworkTypeDTO);
+    BodyworkType getBodyworkTypeByName(String name);
 
     ResponseEntity<List<BodyworkTypeDTO>> getAllBodyworkTypes();
 }

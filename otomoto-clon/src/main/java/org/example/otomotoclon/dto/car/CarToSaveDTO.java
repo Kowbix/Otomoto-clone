@@ -1,19 +1,14 @@
-package org.example.otomotoclon.dto;
+package org.example.otomotoclon.dto.car;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.otomotoclon.dto.EngineDTO;
 
-import java.util.Set;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
-public class CarDTOExtended {
+public class CarToSaveDTO {
 
-    private long id;
     private String brand;
     private String model;
     private String generation;
@@ -21,11 +16,10 @@ public class CarDTOExtended {
     private String bodyworkType;
     private String fuel;
     private int millage;
+    private String damageCondition;
     private String vin;
-    private int horsepower;
-    private int engineCapacity;
+    private EngineDTO engineDTO;
     private String transmission;
     private int doorCount;
     private int seatCount;
-    Set<String> imageUrls;
 }

@@ -1,4 +1,4 @@
-package org.example.otomotoclon.dto;
+package org.example.otomotoclon.dto.car;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -7,11 +7,8 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class CarDTO {
 
-    private long id;
     private String brand;
     private String model;
     private String generation;
