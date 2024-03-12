@@ -9,6 +9,6 @@ import java.util.List;
 
 public interface ImageService {
 
-    List<String> uploadImages(List<MultipartFile> files) throws InvalidFileExtension;
-    void deleteImages(List<String> filenames) throws ObjectDontExistInDBException;
+    List<Image> uploadImages(List<MultipartFile> files) throws InvalidFileExtension;
+    void deleteImages(List<Image> images) throws ObjectDontExistInDBException;
 }

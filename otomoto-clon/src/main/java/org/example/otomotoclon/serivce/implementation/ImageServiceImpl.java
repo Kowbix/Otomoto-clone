@@ -1,5 +1,6 @@
 package org.example.otomotoclon.serivce.implementation;
 
+import org.example.otomotoclon.entity.Image;
 import org.example.otomotoclon.exception.InvalidFileExtension;
 import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.serivce.ImageService;
@@ -31,46 +32,39 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public List<String> uploadImages(List<MultipartFile> imageFiles) throws InvalidFileExtension {
-        List<String> imageUrls = new ArrayList<>();
-        for(MultipartFile image : imageFiles) {
+    public List<Image> uploadImages(List<MultipartFile> imageFiles) throws InvalidFileExtension {
+        List<Image> images = new ArrayList<>();
+        for(MultipartFile imageFile : imageFiles) {
             try {
-                String imageUrl = uploadImage(image);
-                imageUrls.add(imageUrl);
-            } catch (InvalidFileExtension e) {
-                throw new InvalidFileExtension(e.getMessage());
+                Image image = uploadImage(imageFile);
+                images.add(image);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return imageUrls;
+        return images;
     }
 
     @Override
-    public void deleteImages(List<String> imageNames) throws ObjectDontExistInDBException {
-        for (String image : imageNames){
-            try {
-                deleteImage(image);
-            } catch (ObjectDontExistInDBException e) {
-                throw new ObjectDontExistInDBException(e.getMessage());
-            }
+    public void deleteImages(List<Image> images) throws ObjectDontExistInDBException {
+        for (Image image : images){
+            deleteImage(image.getFilename());
         }
     }
 
-    private String uploadImage(MultipartFile imageFile) throws InvalidFileExtension {
+    private Image uploadImage(MultipartFile imageFile) throws InvalidFileExtension {
         if(!isImageFile(imageFile)) {
             throw new InvalidFileExtension("Invalid image extension - " + imageFile.getOriginalFilename());
         }
         String imageName = s3Service.uploadFile(BUCKET_NAME, imageFile);
-        return getImageUrl(imageName);
+        Image image = new Image();
+        image.setUrl(getImageUrl(imageName));
+        image.setFilename(imageName);
+        return image;
     }
 
     private void deleteImage(String filename) throws ObjectDontExistInDBException {
-        try {
-            s3Service.deleteFile(BUCKET_NAME, filename);
-        } catch (ObjectDontExistInDBException e) {
-            throw new ObjectDontExistInDBException(e.getMessage());
-        }
+        s3Service.deleteFile(BUCKET_NAME, filename);
     }
 
     private boolean isImageFile(MultipartFile file) {
