@@ -13,4 +13,5 @@ public interface GenerationRepository extends JpaRepository<Generation, Long> {
 
     Optional<Generation> findGenerationByNameAndModelName(String generationName, String modelName);
     List<Generation> findGenerationsByModelName(String name);
+
 }

@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -55,5 +56,12 @@ public class GenerationServiceImpl implements GenerationService {
                         .map(generation -> generationMapper.toDTO(generation))
                         .collect(Collectors.toList())
         );
+    }
+
+    @Override
+    public Generation getGenerationByNameAndModelName(String generationName, String modelName)  throws ObjectDontExistInDBException {
+        return generationRepository.findGenerationByNameAndModelName(generationName, modelName)
+                .orElseThrow(() ->
+                        new ObjectDontExistInDBException("Generation does not exists with generation name: " + generationName + " and model name: " + modelName));
     }
 }
