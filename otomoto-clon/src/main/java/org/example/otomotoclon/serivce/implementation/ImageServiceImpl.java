@@ -38,7 +38,7 @@ public class ImageServiceImpl implements ImageService {
                 String imageUrl = uploadImage(image);
                 imageUrls.add(imageUrl);
             } catch (InvalidFileExtension e) {
-                throw new InvalidFileExtension("Invalid image extension - " + image.getOriginalFilename());
+                throw new InvalidFileExtension(e.getMessage());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -47,16 +47,30 @@ public class ImageServiceImpl implements ImageService {
     }
 
     @Override
-    public void deleteImages(List<String> filenames) throws ObjectDontExistInDBException {
-
+    public void deleteImages(List<String> imageNames) throws ObjectDontExistInDBException {
+        for (String image : imageNames){
+            try {
+                deleteImage(image);
+            } catch (ObjectDontExistInDBException e) {
+                throw new ObjectDontExistInDBException(e.getMessage());
+            }
+        }
     }
 
     private String uploadImage(MultipartFile imageFile) throws InvalidFileExtension {
         if(!isImageFile(imageFile)) {
-            throw new InvalidFileExtension("Invalid image extension");
+            throw new InvalidFileExtension("Invalid image extension - " + imageFile.getOriginalFilename());
         }
         String imageName = s3Service.uploadFile(BUCKET_NAME, imageFile);
         return getImageUrl(imageName);
+    }
+
+    private void deleteImage(String filename) throws ObjectDontExistInDBException {
+        try {
+            s3Service.deleteFile(BUCKET_NAME, filename);
+        } catch (ObjectDontExistInDBException e) {
+            throw new ObjectDontExistInDBException(e.getMessage());
+        }
     }
 
     private boolean isImageFile(MultipartFile file) {

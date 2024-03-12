@@ -1,6 +1,7 @@
 package org.example.otomotoclon.serivce.implementation;
 
 import com.amazonaws.services.s3.AmazonS3;
+import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.serivce.S3Service;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,8 +33,11 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public void deleteFile(String bucketName, String filename) {
-
+    public void deleteFile(String bucketName, String filename) throws ObjectDontExistInDBException {
+        if(!s3.doesObjectExist(bucketName, filename)) {
+            throw new ObjectDontExistInDBException("Image with name: " + filename + " does not exists in AWS S3");
+        }
+        s3.deleteObject(bucketName, filename);
     }
 
     private String setFilename(String currentFilename) {
