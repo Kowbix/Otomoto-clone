@@ -1,9 +1,7 @@
 package org.example.otomotoclon;
 
-import org.aspectj.lang.annotation.Before;
 import org.example.otomotoclon.entity.Image;
 import org.example.otomotoclon.exception.InvalidFileExtension;
-import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.serivce.ImageService;
 import org.example.otomotoclon.serivce.S3Service;
 import org.example.otomotoclon.serivce.implementation.ImageServiceImpl;
@@ -11,20 +9,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mock.web.MockMultipartFile;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
-import static org.mockito.Mockito.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.Mockito.when;
 
 public class ImageServiceTest {
 
