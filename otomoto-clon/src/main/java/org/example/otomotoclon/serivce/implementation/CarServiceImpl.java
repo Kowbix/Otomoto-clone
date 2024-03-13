@@ -60,8 +60,11 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void deleteCar(long carId) throws ObjectDontExistInDBException{
-
+    public void deleteCar(long carId) throws ObjectDontExistInDBException {
+        Car carToDelete = carRepository.findById(carId).orElseThrow(() ->
+                 new ObjectDontExistInDBException("Car with id: " + carId + " dose not exists in database"));
+        imageService.deleteImages(carToDelete.getImages());
+        carRepository.delete(carToDelete);
     }
 
     private Car mapCarToSaveToCarEntity(CarToSaveDTO carToSaveDTO, List<MultipartFile> images) throws ObjectDontExistInDBException {
@@ -86,4 +89,5 @@ public class CarServiceImpl implements CarService {
         car.setSeatCount(car.getSeatCount());
         return car;
     }
+
 }
