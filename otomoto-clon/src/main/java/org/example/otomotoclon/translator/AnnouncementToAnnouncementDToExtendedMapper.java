@@ -1,10 +1,10 @@
 package org.example.otomotoclon.translator;
 
 import org.example.otomotoclon.dto.EngineDTO;
+import org.example.otomotoclon.dto.LocationDTO;
+import org.example.otomotoclon.dto.announcement.AnnouncementDTOExtended;
 import org.example.otomotoclon.dto.car.CarDTOExtended;
-import org.example.otomotoclon.entity.Car;
-import org.example.otomotoclon.entity.Engine;
-import org.example.otomotoclon.entity.Image;
+import org.example.otomotoclon.entity.*;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
@@ -14,7 +14,20 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
-public interface CarEntityToCarDTOExtended {
+public interface AnnouncementToAnnouncementDToExtendedMapper {
+
+
+    @Mappings({
+            @Mapping(target = "id", source = "id"),
+            @Mapping(expression = "java(toCarDTOExtended(announcement.getCar()))", target = "car"),
+            @Mapping(target = "price", source = "price"),
+            @Mapping(target = "mainImageUrl", source = "announcement.mainImage.url"),
+            @Mapping(target = "descriptionUrl", source = "descriptionUrl"),
+            @Mapping(target = "addedDate", source = "addedDate"),
+            @Mapping(target = "views", source = "views"),
+            @Mapping(expression = "java(toLocationDTO(announcement.getLocation()))", target = "locationDTO"),
+    })
+    AnnouncementDTOExtended toAnnouncementDTOExtended(Announcement announcement);
 
     @Mappings({
             @Mapping(target = "brand", source = "car.brand.name"),
@@ -46,4 +59,10 @@ public interface CarEntityToCarDTOExtended {
                 .map(Image::getUrl)
                 .collect(Collectors.toList());
     }
+
+    @Mappings({
+            @Mapping(source = "cityName", target = "cityName"),
+            @Mapping(source = "voivodeship.name", target = "voivodeshipName")
+    })
+    LocationDTO toLocationDTO(Location location);
 }

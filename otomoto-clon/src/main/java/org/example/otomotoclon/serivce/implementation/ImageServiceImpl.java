@@ -16,9 +16,8 @@ import java.util.List;
 @Service
 public class ImageServiceImpl implements ImageService {
 
-
-    @Value("${aws.s3.bucket.images.name}")
-    private String BUCKET_NAME;
+    @Value("${aws.s3.bucket.image.folder}")
+    private String IMAGE_FOLDER;
 
     @Value("${aws.s3.bucket.images.path}")
     private String IMAGE_PATH;
@@ -56,7 +55,7 @@ public class ImageServiceImpl implements ImageService {
         if(!isImageFile(imageFile)) {
             throw new InvalidFileExtension("Invalid image extension - " + imageFile.getOriginalFilename());
         }
-        String imageName = s3Service.uploadFile(BUCKET_NAME, imageFile);
+        String imageName = s3Service.uploadFile(IMAGE_FOLDER, imageFile);
         Image image = new Image();
         image.setUrl(getImageUrl(imageName));
         image.setFilename(imageName);
@@ -64,7 +63,7 @@ public class ImageServiceImpl implements ImageService {
     }
 
     private void deleteImage(String filename) throws ObjectDontExistInDBException {
-        s3Service.deleteFile(BUCKET_NAME, filename);
+        s3Service.deleteFile(IMAGE_FOLDER, filename);
     }
 
     private boolean isImageFile(MultipartFile file) {

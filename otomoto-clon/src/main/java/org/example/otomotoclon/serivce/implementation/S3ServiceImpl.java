@@ -3,6 +3,7 @@ package org.example.otomotoclon.serivce.implementation;
 import com.amazonaws.services.s3.AmazonS3;
 import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.serivce.S3Service;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -16,16 +17,19 @@ public class S3ServiceImpl implements S3Service {
 
     private final AmazonS3 s3;
 
+    @Value("${aws.s3.bucket.name}")
+    private String BUCKET_NAME;
+
     public S3ServiceImpl(AmazonS3 s3) {
         this.s3 = s3;
     }
 
     @Override
-    public String uploadFile(String bucketName, MultipartFile file) {
+    public String uploadFile(String folder, MultipartFile file) {
         String filename = setFilename(file.getOriginalFilename());
         try {
             File fileToUpload = convertMultiPartToFile(file);
-            s3.putObject(bucketName, filename, fileToUpload);
+            s3.putObject(BUCKET_NAME, folder + filename, fileToUpload);
             return filename;
         } catch (IOException e) {
             throw new RuntimeException(e.getMessage(), e.getCause());
@@ -33,11 +37,11 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
-    public void deleteFile(String bucketName, String filename) throws ObjectDontExistInDBException {
-        if(!s3.doesObjectExist(bucketName, filename)) {
+    public void deleteFile(String folder, String filename) throws ObjectDontExistInDBException {
+        if(!s3.doesObjectExist(BUCKET_NAME, filename)) {
             throw new ObjectDontExistInDBException("Image with name: " + filename + " does not exists in AWS S3");
         }
-        s3.deleteObject(bucketName, filename);
+        s3.deleteObject(BUCKET_NAME, filename);
     }
 
     private String setFilename(String currentFilename) {

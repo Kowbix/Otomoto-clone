@@ -1,25 +1,22 @@
-package org.example.otomotoclon.dto;
+package org.example.otomotoclon.dto.announcement;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.example.otomotoclon.dto.LocationDTO;
+import org.example.otomotoclon.dto.car.CarDTOExtended;
 
 import java.util.Date;
 
 @Getter
 @Setter
-@AllArgsConstructor
-@NoArgsConstructor
 public class AnnouncementDTOExtended {
 
     private long id;
-    private CarDTO car;
+    private CarDTOExtended car;
     private float price;
     private String mainImageUrl;
     private String descriptionUrl;
     private Date addedDate;
     private long views;
-    private String voivodeship;
-    private String cityName;
+    private LocationDTO locationDTO;
 }
