@@ -1,5 +1,7 @@
 package org.example.otomotoclon.serivce.implementation;
 
+import com.amazonaws.services.s3.model.S3Object;
+import com.amazonaws.services.s3.model.S3ObjectInputStream;
 import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.serivce.DescriptionFileService;
 import org.example.otomotoclon.serivce.S3Service;
@@ -44,9 +46,11 @@ public class DescriptionFileServiceImpl implements DescriptionFileService {
     }
 
     @Override
-    public void updateDescriptionFile(String description) {
-
+    public String updateDescriptionFile(String descriptionUrl, String updatedDescription, long cardId) throws ObjectDontExistInDBException, IOException {
+        deleteDescriptionFile(descriptionUrl);
+        return createAndUploadDescriptionFile(updatedDescription, cardId);
     }
+
 
     private File createTemporaryFile(long carId) throws IOException {
         File temporaryDescriptionFile = File.createTempFile("0" + Long.toString(carId), ".txt");

@@ -14,7 +14,7 @@ import org.example.otomotoclon.serivce.AnnouncementService;
 import org.example.otomotoclon.serivce.CarService;
 import org.example.otomotoclon.serivce.DescriptionFileService;
 import org.example.otomotoclon.serivce.LocationService;
-import org.example.otomotoclon.translator.AnnouncementToAnnouncementDToExtendedMapper;
+import org.example.otomotoclon.translator.AnnouncementToAnnouncementDTOExtendedMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,13 +29,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final CarService carService;
     private final LocationService locationService;
     private final DescriptionFileService descriptionFileService;
-    private final AnnouncementToAnnouncementDToExtendedMapper announcementToAnnouncementDToExtendedMapper;
+    private final AnnouncementToAnnouncementDTOExtendedMapper announcementToAnnouncementDToExtendedMapper;
 
     public AnnouncementServiceImpl(AnnouncementRepository announcementRepository,
                                    CarService carService,
                                    LocationService locationService,
                                    DescriptionFileService descriptionFileService,
-                                   AnnouncementToAnnouncementDToExtendedMapper announcementToAnnouncementDToExtendedMapper) {
+                                   AnnouncementToAnnouncementDTOExtendedMapper announcementToAnnouncementDToExtendedMapper) {
         this.announcementRepository = announcementRepository;
         this.carService = carService;
         this.locationService = locationService;
@@ -101,15 +101,17 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Transactional
     @Override
-    public AnnouncementDTOExtended updateAnnouncement(long announcementId) {
+    public AnnouncementDTOExtended updateAnnouncement(long announcementId, AnnouncementDTOExtended announcementDTOExtended) {
 //        TODO: update announcement
         return null;
     }
 
     @Override
-    public AnnouncementDTOExtended getAnnouncementById(long announcementId) {
-//        TODO: get announcement by id
-        return null;
+    public AnnouncementDTOExtended getAnnouncementById(long announcementId) throws ObjectDontExistInDBException {
+        Announcement announcement = announcementRepository.findById(announcementId).orElseThrow(
+                () -> new ObjectDontExistInDBException("Announcement with id: " + announcementId + " does not exists")
+        );
+        return announcementToAnnouncementDToExtendedMapper.toAnnouncementDTOExtended(announcement);
     }
 
     @Override

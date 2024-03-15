@@ -6,5 +6,5 @@ public interface DescriptionFileService {
 
     String createAndUploadDescriptionFile(String description, long carId) throws IOException;
     void deleteDescriptionFile(String descriptionUrl);
-    void updateDescriptionFile(String description);
+    String updateDescriptionFile(String descriptionUrl, String updatedDescription, long cardId) throws IOException;
 }

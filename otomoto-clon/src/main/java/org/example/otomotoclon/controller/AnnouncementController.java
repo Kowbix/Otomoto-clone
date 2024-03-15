@@ -59,4 +59,15 @@ public class AnnouncementController {
         }
         return ResponseEntity.ok(new Response("Announcement deleted", HttpStatus.OK.value()));
     }
+
+    @GetMapping("/{announcementId}")
+    public ResponseEntity<?> getAnnouncementById(@PathVariable long announcementId) {
+        AnnouncementDTOExtended announcementDTOExtended;
+        try {
+            announcementDTOExtended = announcementService.getAnnouncementById(announcementId);
+        } catch (ObjectDontExistInDBException e) {
+            return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+        return ResponseEntity.ok(announcementDTOExtended);
+    }
 }

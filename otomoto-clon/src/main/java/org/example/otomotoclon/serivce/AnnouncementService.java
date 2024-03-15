@@ -13,7 +13,7 @@ public interface AnnouncementService {
     AnnouncementDTOExtended createAnnouncement(AnnouncementToSaveDTO announcementToSave, List<MultipartFile> images) throws IOException;
     void activeAnnouncement(long announcementId);
     void deleteAnnouncement(long announcementId);
-    AnnouncementDTOExtended updateAnnouncement(long announcementId);
+    AnnouncementDTOExtended updateAnnouncement(long announcementId, AnnouncementDTOExtended announcementDTOExtended);
     AnnouncementDTOExtended getAnnouncementById(long announcementId);
     List<AnnouncementDTO> getAnnouncements(int page, int limit,
                                            String brand,

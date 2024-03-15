@@ -1,6 +1,7 @@
 package org.example.otomotoclon.serivce.implementation;
 
 import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.model.S3Object;
 import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.serivce.S3Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -49,6 +50,14 @@ public class S3ServiceImpl implements S3Service {
             throw new ObjectDontExistInDBException("File with name: " + folder + filename + " does not exists in bucket: " + BUCKET_NAME);
         }
         s3.deleteObject(BUCKET_NAME, folder + filename);
+    }
+
+    @Override
+    public S3Object getFile(String folder, String filename) throws ObjectDontExistInDBException {
+        if(!s3.doesObjectExist(BUCKET_NAME, folder + filename)) {
+            throw new ObjectDontExistInDBException("File with name: " + folder + filename + " does not exists in bucket: " + BUCKET_NAME);
+        }
+        return s3.getObject(BUCKET_NAME, folder + filename);
     }
 
     private String setFilename(String currentFilename) {

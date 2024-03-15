@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Mapper
-public interface AnnouncementToAnnouncementDToExtendedMapper {
+public interface AnnouncementToAnnouncementDTOExtendedMapper {
 
 
     @Mappings({
