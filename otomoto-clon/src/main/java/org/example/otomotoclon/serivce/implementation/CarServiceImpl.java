@@ -86,7 +86,7 @@ public class CarServiceImpl implements CarService {
         car.setEngine(engineService.getOrCreateEngineForCar(carToSaveDTO.getEngineDTO()));
         car.setTransmission(transmissionService.getTransmissionByName(carToSaveDTO.getTransmission()));
         car.setDoorCount(carToSaveDTO.getDoorCount());
-        car.setSeatCount(car.getSeatCount());
+        car.setSeatCount(carToSaveDTO.getSeatCount());
         return car;
     }
 

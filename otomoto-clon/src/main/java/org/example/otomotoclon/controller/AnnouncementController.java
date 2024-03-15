@@ -39,4 +39,14 @@ public class AnnouncementController {
 
         return ResponseEntity.ok(savedAnnouncement);
     }
+
+    @PutMapping("/active/{announcementId}")
+    public ResponseEntity<Response> activeAnnouncementById(@PathVariable long announcementId) {
+        try {
+            announcementService.activeAnnouncement(announcementId);
+        } catch (ObjectDontExistInDBException e) {
+            return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+        return ResponseEntity.ok(new Response("Announcement activated", HttpStatus.OK.value()));
+    }
 }

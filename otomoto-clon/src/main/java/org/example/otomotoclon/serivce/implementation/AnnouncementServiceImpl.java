@@ -18,10 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class AnnouncementServiceImpl implements AnnouncementService {
@@ -74,10 +71,15 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return announcement;
     }
 
-    @Transactional
     @Override
-    public void activeAnnouncement(long announcementId) {
-
+    public void activeAnnouncement(long announcementId) throws ObjectDontExistInDBException{
+        Optional<Announcement> announcement = announcementRepository.findById(announcementId);
+        if(announcement.isEmpty()) {
+            throw new ObjectDontExistInDBException("Announcement with id: " + announcementId + " does not exists");
+        }
+        Announcement announcementToUpdate = announcement.get();
+        announcementToUpdate.setActive(true);
+        announcementRepository.save(announcementToUpdate);
     }
 
     @Transactional
@@ -98,7 +100,26 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public List<AnnouncementDTO> getAnnouncements(int page, int limit, String brand, String model, String generation, int yearProduction_min, int yearProduction_max, String bodyworkType, String fuel, int millage_min, int millage_max, boolean isVin, int capacity_min, int capacity_max, int horsepower_min, int horsepower_max, int doors_min, int doors_max, int seats_min, int seats_max) {
+    public List<AnnouncementDTO> getAnnouncements(int page,
+                                                  int limit,
+                                                  String brand,
+                                                  String model,
+                                                  String generation,
+                                                  int yearProduction_min,
+                                                  int yearProduction_max,
+                                                  String bodyworkType,
+                                                  String fuel,
+                                                  int millage_min,
+                                                  int millage_max,
+                                                  boolean isVin,
+                                                  int capacity_min,
+                                                  int capacity_max,
+                                                  int horsepower_min,
+                                                  int horsepower_max,
+                                                  int doors_min,
+                                                  int doors_max,
+                                                  int seats_min,
+                                                  int seats_max) {
         return null;
     }
 
