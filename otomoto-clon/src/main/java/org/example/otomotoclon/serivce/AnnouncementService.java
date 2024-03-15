@@ -5,11 +5,12 @@ import org.example.otomotoclon.dto.announcement.AnnouncementDTOExtended;
 import org.example.otomotoclon.dto.announcement.AnnouncementToSaveDTO;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface AnnouncementService {
 
-    AnnouncementDTOExtended createAnnouncement(AnnouncementToSaveDTO announcementToSave, List<MultipartFile> images);
+    AnnouncementDTOExtended createAnnouncement(AnnouncementToSaveDTO announcementToSave, List<MultipartFile> images) throws IOException;
     void activeAnnouncement(long announcementId);
     void deleteAnnouncement(long announcementId);
     AnnouncementDTOExtended updateAnnouncement(long announcementId);

@@ -12,12 +12,14 @@ import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.repository.AnnouncementRepository;
 import org.example.otomotoclon.serivce.AnnouncementService;
 import org.example.otomotoclon.serivce.CarService;
+import org.example.otomotoclon.serivce.DescriptionFileService;
 import org.example.otomotoclon.serivce.LocationService;
 import org.example.otomotoclon.translator.AnnouncementToAnnouncementDToExtendedMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.*;
 
 @Service
@@ -26,42 +28,45 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final AnnouncementRepository announcementRepository;
     private final CarService carService;
     private final LocationService locationService;
+    private final DescriptionFileService descriptionFileService;
     private final AnnouncementToAnnouncementDToExtendedMapper announcementToAnnouncementDToExtendedMapper;
 
     public AnnouncementServiceImpl(AnnouncementRepository announcementRepository,
                                    CarService carService,
                                    LocationService locationService,
+                                   DescriptionFileService descriptionFileService,
                                    AnnouncementToAnnouncementDToExtendedMapper announcementToAnnouncementDToExtendedMapper) {
         this.announcementRepository = announcementRepository;
         this.carService = carService;
         this.locationService = locationService;
+        this.descriptionFileService = descriptionFileService;
         this.announcementToAnnouncementDToExtendedMapper = announcementToAnnouncementDToExtendedMapper;
     }
 
     @Transactional
     @Override
     public AnnouncementDTOExtended createAnnouncement(AnnouncementToSaveDTO announcementToSaveDTO,
-                                                      List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension {
+                                                      List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
         return saveAnnouncement(announcementToSaveDTO, images);
     }
 
     private AnnouncementDTOExtended saveAnnouncement(AnnouncementToSaveDTO announcementToSaveDTO,
-                                                     List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension {
+                                                     List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
         Announcement announcementToSave = mapAnnouncementToSaveToAnnouncementEntity(announcementToSaveDTO, images);
         Announcement announcementSaved =  announcementRepository.save(announcementToSave);
         return announcementToAnnouncementDToExtendedMapper.toAnnouncementDTOExtended(announcementSaved);
     }
     private Announcement mapAnnouncementToSaveToAnnouncementEntity(AnnouncementToSaveDTO announcementToSaveDTO,
-                                                                   List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension {
+                                                                   List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
         Car car = carService.createCar(announcementToSaveDTO.getCarToSaveDTO(), images);
         Announcement announcement = new Announcement();
         announcement.setCar(car);
         announcement.setMainImage(car.getImages().get(0));
-//        TODO: add description file service
-        announcement.setDescriptionUrl(announcementToSaveDTO.getDescription());
+        String descriptionUrl = descriptionFileService.createAndUploadDescriptionFile(announcementToSaveDTO.getDescription(), car.getId());
+        announcement.setDescriptionUrl(descriptionUrl);
         announcement.setPrice(announcementToSaveDTO.getPrice());
         announcement.setLocation(locationService.getOrCreateLocationForAnnouncement(announcementToSaveDTO.getLocationDTO()));
-//        TODO: add user to announcement from JWT
+//        TODO: add user to announcement from JWT and delete function to add test user
         announcement.setUser(setTestUser());
         Date currentDate = new Date();
         announcement.setAddedDate(currentDate);
@@ -85,17 +90,19 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     @Transactional
     @Override
     public void deleteAnnouncement(long announcementId) {
-
+//        TODO: delete announcement -> car and files
     }
 
     @Transactional
     @Override
     public AnnouncementDTOExtended updateAnnouncement(long announcementId) {
+//        TODO: update announcement
         return null;
     }
 
     @Override
     public AnnouncementDTOExtended getAnnouncementById(long announcementId) {
+//        TODO: get announcement by id
         return null;
     }
 
@@ -120,6 +127,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                                                   int doors_max,
                                                   int seats_min,
                                                   int seats_max) {
+
+//       TODO: get announcements by filters
         return null;
     }
 

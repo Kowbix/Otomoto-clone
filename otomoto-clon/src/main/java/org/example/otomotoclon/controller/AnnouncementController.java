@@ -12,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -30,11 +31,10 @@ public class AnnouncementController {
                     announcementToSaveDTO,
                     images
             );
-        } catch (InvalidFileExtension e) {
+        } catch (InvalidFileExtension | ObjectDontExistInDBException e) {
             return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
-        }
-        catch (ObjectDontExistInDBException e) {
-            return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(new Response(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
         }
 
         return ResponseEntity.ok(savedAnnouncement);

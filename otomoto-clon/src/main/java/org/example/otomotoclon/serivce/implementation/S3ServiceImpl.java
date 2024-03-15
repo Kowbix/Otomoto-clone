@@ -37,11 +37,18 @@ public class S3ServiceImpl implements S3Service {
     }
 
     @Override
+    public String uploadFile(String folder, File file) {
+        String filename = setFilename(file.getName());
+        s3.putObject(BUCKET_NAME, folder + filename, file);
+        return filename;
+    }
+
+    @Override
     public void deleteFile(String folder, String filename) throws ObjectDontExistInDBException {
-        if(!s3.doesObjectExist(BUCKET_NAME, filename)) {
+        if(!s3.doesObjectExist(BUCKET_NAME, folder + filename)) {
             throw new ObjectDontExistInDBException("Image with name: " + filename + " does not exists in AWS S3");
         }
-        s3.deleteObject(BUCKET_NAME, filename);
+        s3.deleteObject(BUCKET_NAME, folder + filename);
     }
 
     private String setFilename(String currentFilename) {
