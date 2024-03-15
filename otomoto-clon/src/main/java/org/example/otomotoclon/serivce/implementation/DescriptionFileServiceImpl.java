@@ -1,5 +1,6 @@
 package org.example.otomotoclon.serivce.implementation;
 
+import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.serivce.DescriptionFileService;
 import org.example.otomotoclon.serivce.S3Service;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,8 +38,9 @@ public class DescriptionFileServiceImpl implements DescriptionFileService {
     }
 
     @Override
-    public String deleteDescriptionFile(String descriptionUrl) {
-        return null;
+    public void deleteDescriptionFile(String descriptionUrl) throws ObjectDontExistInDBException {
+        String filename = getFilenameFromFileUrl(descriptionUrl);
+        s3Service.deleteFile(DESCRIPTION_FOLDER, filename);
     }
 
     @Override
@@ -53,5 +55,10 @@ public class DescriptionFileServiceImpl implements DescriptionFileService {
 
     private String getDescriptionUrl(String filename) {
         return DESCRIPTION_PATH + "/" + filename;
+    }
+
+    private String getFilenameFromFileUrl(String descriptionUrl) {
+        String filename = descriptionUrl.substring(descriptionUrl.lastIndexOf("/") + 1);
+        return filename;
     }
 }

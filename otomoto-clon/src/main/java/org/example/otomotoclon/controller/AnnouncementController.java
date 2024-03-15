@@ -49,4 +49,14 @@ public class AnnouncementController {
         }
         return ResponseEntity.ok(new Response("Announcement activated", HttpStatus.OK.value()));
     }
+
+    @DeleteMapping("/delete/{announcementId}")
+    public ResponseEntity<Response> deleteAnnouncementById(@PathVariable long announcementId) {
+        try {
+            announcementService.deleteAnnouncement(announcementId);
+        } catch (ObjectDontExistInDBException e) {
+            return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        }
+        return ResponseEntity.ok(new Response("Announcement deleted", HttpStatus.OK.value()));
+    }
 }

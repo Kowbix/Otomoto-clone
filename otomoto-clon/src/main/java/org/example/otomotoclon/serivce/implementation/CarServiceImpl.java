@@ -60,9 +60,7 @@ public class CarServiceImpl implements CarService {
     }
 
     @Override
-    public void deleteCar(long carId) throws ObjectDontExistInDBException {
-        Car carToDelete = carRepository.findById(carId).orElseThrow(() ->
-                 new ObjectDontExistInDBException("Car with id: " + carId + " dose not exists in database"));
+    public void deleteCar(Car carToDelete) throws ObjectDontExistInDBException {
         imageService.deleteImages(carToDelete.getImages());
         carRepository.delete(carToDelete);
     }

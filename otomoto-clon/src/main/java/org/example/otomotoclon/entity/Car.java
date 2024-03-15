@@ -68,7 +68,7 @@ public class Car {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "car_id")
     private List<Image> images;
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "engine_id", referencedColumnName = "id")
     private Engine engine;
     @ManyToOne(

@@ -46,7 +46,7 @@ public class S3ServiceImpl implements S3Service {
     @Override
     public void deleteFile(String folder, String filename) throws ObjectDontExistInDBException {
         if(!s3.doesObjectExist(BUCKET_NAME, folder + filename)) {
-            throw new ObjectDontExistInDBException("Image with name: " + filename + " does not exists in AWS S3");
+            throw new ObjectDontExistInDBException("File with name: " + folder + filename + " does not exists in bucket: " + BUCKET_NAME);
         }
         s3.deleteObject(BUCKET_NAME, folder + filename);
     }

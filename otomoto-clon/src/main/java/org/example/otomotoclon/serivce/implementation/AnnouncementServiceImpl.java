@@ -89,8 +89,14 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Transactional
     @Override
-    public void deleteAnnouncement(long announcementId) {
-//        TODO: delete announcement -> car and files
+    public void deleteAnnouncement(long announcementId) throws ObjectDontExistInDBException{
+//        TODO: add check function to is the announcement belong to user
+        Announcement announcementToDelete = announcementRepository.findById(announcementId).orElseThrow(
+                () -> new ObjectDontExistInDBException("Announcement with id: " + announcementId + " does not exists")
+        );
+        announcementRepository.delete(announcementToDelete);
+        descriptionFileService.deleteDescriptionFile(announcementToDelete.getDescriptionUrl());
+        carService.deleteCar(announcementToDelete.getCar());
     }
 
     @Transactional

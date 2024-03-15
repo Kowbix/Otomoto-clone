@@ -10,5 +10,5 @@ import java.util.List;
 public interface CarService {
 
     Car createCar(CarToSaveDTO carToSaveDTO, List<MultipartFile> images);
-    void deleteCar(long carId);
+    void deleteCar(Car carToDelete);
 }
