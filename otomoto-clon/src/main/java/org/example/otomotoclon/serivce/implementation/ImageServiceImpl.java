@@ -51,6 +51,20 @@ public class ImageServiceImpl implements ImageService {
         }
     }
 
+    @Override
+    public List<Image> updateImages(List<Image> images, List<String> urls) {
+        List<Image> newImages = new ArrayList<>();
+        for (Image image : images) {
+            String imageUrl = image.getUrl();
+            if (urls.contains(imageUrl)) {
+                newImages.add(image);
+            } else {
+                deleteImage(image.getFilename());
+            }
+        }
+        return newImages;
+    }
+
     private Image uploadImage(MultipartFile imageFile) throws InvalidFileExtension {
         if(!isImageFile(imageFile)) {
             throw new InvalidFileExtension("Invalid image extension - " + imageFile.getOriginalFilename());

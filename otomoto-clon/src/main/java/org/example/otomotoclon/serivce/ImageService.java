@@ -11,4 +11,5 @@ public interface ImageService {
 
     List<Image> uploadImages(List<MultipartFile> files) throws InvalidFileExtension;
     void deleteImages(List<Image> images) throws ObjectDontExistInDBException;
+    List<Image> updateImages(List<Image> images, List<String> urls);
 }

@@ -70,4 +70,22 @@ public class AnnouncementController {
         }
         return ResponseEntity.ok(announcementDTOExtended);
     }
+
+    @PutMapping()
+    public ResponseEntity<?> updateAnnouncement(@ModelAttribute AnnouncementDTOExtended announcementDTOExtended,
+                                                @RequestParam(value = "images",  required = false) List<MultipartFile> images) {
+        AnnouncementDTOExtended updatedAnnouncement;
+        try {
+            updatedAnnouncement =  announcementService.updateAnnouncement(
+                    announcementDTOExtended,
+                    images
+            );
+        } catch (InvalidFileExtension | ObjectDontExistInDBException e) {
+            return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(new Response(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));
+        }
+
+        return ResponseEntity.ok(updatedAnnouncement);
+    }
 }

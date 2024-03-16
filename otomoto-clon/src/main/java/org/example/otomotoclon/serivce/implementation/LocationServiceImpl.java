@@ -35,6 +35,15 @@ public class LocationServiceImpl implements LocationService {
         return create(cityName, voivodeshipName);
     }
 
+    @Override
+    public boolean compareLocationToLocationDTO(Location location, LocationDTO locationDTO) {
+        if(location == null || locationDTO == null) {
+            return false;
+        }
+        return location.getCityName() == locationDTO.getCityName() &&
+                location.getVoivodeship().getName() == locationDTO.getVoivodeshipName();
+    }
+
     private Location create(String cityName, String  voivodeshipName) {
         Location location = new Location();
         location.setCityName(cityName);

@@ -34,6 +34,15 @@ public class EngineServiceImpl implements EngineService {
         return create(engineDTO);
     }
 
+    @Override
+    public boolean compareEngineToEngineDTO(Engine engine, EngineDTO engineDTO) {
+        if (engine == null || engineDTO == null) {
+            return false;
+        }
+        return engine.getCapacity() == engineDTO.getCapacity() &&
+                engine.getHorsepower() == engineDTO.getHorsepower();
+    }
+
     private Engine create(EngineDTO engineDTO) {
         Engine engine = new Engine();
         engine = engineMapper.toEntity(engineDTO);

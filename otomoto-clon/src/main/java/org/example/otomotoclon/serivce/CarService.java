@@ -11,4 +11,5 @@ public interface CarService {
 
     Car createCar(CarToSaveDTO carToSaveDTO, List<MultipartFile> images);
     void deleteCar(Car carToDelete);
+    Car updateCar(Car carToUpdate, CarDTOExtended carDTOExtended, List<MultipartFile> newImages);
 }

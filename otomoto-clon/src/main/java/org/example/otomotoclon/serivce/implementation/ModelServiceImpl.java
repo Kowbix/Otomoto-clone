@@ -32,7 +32,7 @@ public class ModelServiceImpl implements ModelService {
     @Override
     @Transactional
     public void create(ModelDTO modelDto) throws ObjectExistInDBException, ObjectDontExistInDBException {
-        modelRepository.findModelByName(modelDto.getModelName()).ifPresent(value -> {
+        modelRepository.findModelByNameAndBrandName(modelDto.getModelName(), modelDto.getBrandName()).ifPresent(value -> {
             throw new ObjectExistInDBException("Model exists in database with given name");
         });
         Model model = new Model();
@@ -52,7 +52,13 @@ public class ModelServiceImpl implements ModelService {
     }
 
     @Override
-    public Model getModelByName(String name) throws ObjectDontExistInDBException{
+    public Model getModelByNameAndBrand(String name, String brandName) throws ObjectDontExistInDBException {
+        return modelRepository.findModelByNameAndBrandName(name, brandName)
+                .orElseThrow(() -> new ObjectDontExistInDBException("Model " + name + " does not exist with brand " + brandName + " in the database"));
+    }
+
+    @Override
+    public Model getModelByName(String name) throws ObjectDontExistInDBException {
         return modelRepository.findModelByName(name)
                 .orElseThrow(() -> new ObjectDontExistInDBException("Model " + name + " does not exist in the database"));
     }

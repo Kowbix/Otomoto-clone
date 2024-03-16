@@ -12,5 +12,6 @@ public interface ModelService {
 
     void create(ModelDTO modelDto) throws ObjectExistInDBException, ObjectDontExistInDBException;
     ResponseEntity<List<ModelDTO>> getModelsByBrand(String brand);
-    Model getModelByName(String name) throws ObjectDontExistInDBException;
+    Model getModelByNameAndBrand(String modelName, String brandName) throws ObjectDontExistInDBException;
+    Model getModelByName(String name);
 }

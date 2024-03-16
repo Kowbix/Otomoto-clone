@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import org.example.otomotoclon.dto.EngineDTO;
 
-
 @Getter
 @Setter
 public class CarToSaveDTO {
