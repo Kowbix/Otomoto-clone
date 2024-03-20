@@ -1,8 +1,6 @@
 package org.example.otomotoclon.dto.car;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Getter
@@ -16,6 +14,6 @@ public class CarDTO {
     private String fuel;
     private int millage;
     private int horsepower;
-    private int engineCapacity;
+    private int capacity;
     private String transmission;
 }

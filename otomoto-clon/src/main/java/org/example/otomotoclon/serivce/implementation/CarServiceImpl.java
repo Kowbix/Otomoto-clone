@@ -12,7 +12,6 @@ import org.example.otomotoclon.serivce.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -51,9 +50,7 @@ public class CarServiceImpl implements CarService {
 
     @Override
     public Car updateCar(Car carToUpdate, CarDTOExtended carDTOExtended, List<MultipartFile> newImages) throws ObjectDontExistInDBException, InvalidFileExtension {
-        Car updatedCar = carMapper.updateCarFromDTOExtended(carToUpdate, carDTOExtended, newImages);
-
-        return updatedCar;
+        return carMapper.updateCarFromDTOExtended(carToUpdate, carDTOExtended, newImages);
     }
 
 
@@ -93,7 +90,7 @@ public class CarServiceImpl implements CarService {
             Car car = new Car();
             car.setBrand(brandService.getBrandByName(carToSaveDTO.getBrand()));
             car.setModel(modelService.getModelByNameAndBrand(carToSaveDTO.getModel(), carToSaveDTO.getBrand()));
-            if (!carToSaveDTO.getGeneration().isEmpty()) {
+            if (carToSaveDTO.getGeneration() != null) {
                 car.setGeneration(generationService.getGenerationByNameAndModelName(
                         carToSaveDTO.getGeneration(),
                         carToSaveDTO.getModel()));

@@ -27,7 +27,7 @@ public interface AnnouncementToAnnouncementDTOExtendedMapper {
             @Mapping(target = "views", source = "views"),
             @Mapping(expression = "java(toLocationDTO(announcement.getLocation()))", target = "locationDTO"),
     })
-    AnnouncementDTOExtended toAnnouncementDTOExtended(Announcement announcement);
+    AnnouncementDTOExtended toDTOExtended(Announcement announcement);
 
     @Mappings({
             @Mapping(target = "brand", source = "car.brand.name"),

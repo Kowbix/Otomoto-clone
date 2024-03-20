@@ -1,11 +1,13 @@
 package org.example.otomotoclon.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.example.otomotoclon.dto.announcement.AnnouncementDTO;
 import org.example.otomotoclon.dto.announcement.AnnouncementDTOExtended;
 import org.example.otomotoclon.dto.announcement.AnnouncementToSaveDTO;
 import org.example.otomotoclon.entity.Response;
 import org.example.otomotoclon.exception.InvalidFileExtension;
 import org.example.otomotoclon.exception.ObjectDontExistInDBException;
+import org.example.otomotoclon.request.AnnouncementFilterRequest;
 import org.example.otomotoclon.serivce.AnnouncementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -87,5 +89,11 @@ public class AnnouncementController {
         }
 
         return ResponseEntity.ok(updatedAnnouncement);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<AnnouncementDTO>> getByAdvanceFilters (@RequestBody AnnouncementFilterRequest request) {
+        List<AnnouncementDTO> announcements = announcementService.getAnnouncements(request);
+        return ResponseEntity.ok(announcements);
     }
 }
