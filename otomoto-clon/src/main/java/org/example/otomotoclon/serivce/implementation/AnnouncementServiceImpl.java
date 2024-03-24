@@ -105,8 +105,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public List<AnnouncementDTO> getAnnouncements(AnnouncementFilterRequest request) {
-
+    public List<AnnouncementDTO> getAnnouncementsByAdvanceFilters(AnnouncementFilterRequest request) {
         List<Announcement> filteredAnnouncements = getAnnouncementsWithFilters(request);
 
         return filteredAnnouncements.stream().map(announcementToDTOMapper::toDTO).collect(Collectors.toList());

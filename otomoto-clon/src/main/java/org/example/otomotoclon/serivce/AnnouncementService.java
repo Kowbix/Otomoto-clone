@@ -16,5 +16,5 @@ public interface AnnouncementService {
     void deleteAnnouncement(long announcementId);
     AnnouncementDTOExtended updateAnnouncement(AnnouncementDTOExtended announcementDTOExtended, List<MultipartFile> newImages) throws IOException;
     AnnouncementDTOExtended getAnnouncementById(long announcementId);
-    List<AnnouncementDTO> getAnnouncements(AnnouncementFilterRequest request);
+    List<AnnouncementDTO> getAnnouncementsByAdvanceFilters(AnnouncementFilterRequest request);
 }

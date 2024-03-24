@@ -93,7 +93,7 @@ public class AnnouncementController {
 
     @GetMapping("/")
     public ResponseEntity<List<AnnouncementDTO>> getByAdvanceFilters (@RequestBody AnnouncementFilterRequest request) {
-        List<AnnouncementDTO> announcements = announcementService.getAnnouncements(request);
+        List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByAdvanceFilters(request);
         return ResponseEntity.ok(announcements);
     }
 }
