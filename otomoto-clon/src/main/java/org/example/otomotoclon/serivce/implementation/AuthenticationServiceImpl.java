@@ -4,6 +4,7 @@ import org.example.otomotoclon.dto.user.UserLoginDTO;
 import org.example.otomotoclon.dto.user.UserRegisterDTO;
 import org.example.otomotoclon.entity.Role;
 import org.example.otomotoclon.entity.User;
+import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.exception.ObjectExistInDBException;
 import org.example.otomotoclon.repository.RoleRepository;
 import org.example.otomotoclon.repository.UserRepository;
@@ -77,5 +78,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         } catch (BadCredentialsException e) {
             throw new BadCredentialsException("Invalid username or password");
         }
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjectDontExistInDBException("User does not exists"));
     }
 }

@@ -11,9 +11,11 @@ import org.example.otomotoclon.request.AnnouncementFilterRequest;
 import org.example.otomotoclon.serivce.AnnouncementService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,10 +30,12 @@ public class AnnouncementController {
     public ResponseEntity<?> createAnnouncement(@ModelAttribute AnnouncementToSaveDTO announcementToSaveDTO,
                                                 @RequestParam("images") List<MultipartFile> images) {
         AnnouncementDTOExtended savedAnnouncement;
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
             savedAnnouncement =  announcementService.createAnnouncement(
                     announcementToSaveDTO,
-                    images
+                    images,
+                    username
             );
         } catch (InvalidFileExtension | ObjectDontExistInDBException e) {
             return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
@@ -44,9 +48,10 @@ public class AnnouncementController {
 
     @PutMapping("/active/{announcementId}")
     public ResponseEntity<Response> activeAnnouncementById(@PathVariable long announcementId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            announcementService.activeAnnouncement(announcementId);
-        } catch (ObjectDontExistInDBException e) {
+            announcementService.activeAnnouncement(announcementId, username);
+        } catch (ObjectDontExistInDBException | AuthenticationException e) {
             return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
         return ResponseEntity.ok(new Response("Announcement activated", HttpStatus.OK.value()));
@@ -54,9 +59,10 @@ public class AnnouncementController {
 
     @DeleteMapping("/delete/{announcementId}")
     public ResponseEntity<Response> deleteAnnouncementById(@PathVariable long announcementId) {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
-            announcementService.deleteAnnouncement(announcementId);
-        } catch (ObjectDontExistInDBException e) {
+            announcementService.deleteAnnouncement(announcementId, username);
+        } catch (ObjectDontExistInDBException | AuthenticationException e) {
             return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         }
         return ResponseEntity.ok(new Response("Announcement deleted", HttpStatus.OK.value()));
@@ -77,12 +83,14 @@ public class AnnouncementController {
     public ResponseEntity<?> updateAnnouncement(@ModelAttribute AnnouncementDTOExtended announcementDTOExtended,
                                                 @RequestParam(value = "images",  required = false) List<MultipartFile> images) {
         AnnouncementDTOExtended updatedAnnouncement;
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
         try {
             updatedAnnouncement =  announcementService.updateAnnouncement(
                     announcementDTOExtended,
-                    images
+                    images,
+                    username
             );
-        } catch (InvalidFileExtension | ObjectDontExistInDBException e) {
+        } catch (InvalidFileExtension | ObjectDontExistInDBException | AuthenticationException e) {
             return ResponseEntity.status(400).body(new Response(e.getMessage(), HttpStatus.BAD_REQUEST.value()));
         } catch (IOException e) {
             return ResponseEntity.status(500).body(new Response(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value()));

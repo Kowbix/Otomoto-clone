@@ -12,16 +12,14 @@ import org.example.otomotoclon.exception.InvalidFileExtension;
 import org.example.otomotoclon.exception.ObjectDontExistInDBException;
 import org.example.otomotoclon.repository.AnnouncementRepository;
 import org.example.otomotoclon.request.AnnouncementFilterRequest;
-import org.example.otomotoclon.serivce.AnnouncementService;
-import org.example.otomotoclon.serivce.CarService;
-import org.example.otomotoclon.serivce.DescriptionFileService;
-import org.example.otomotoclon.serivce.LocationService;
+import org.example.otomotoclon.serivce.*;
 import org.example.otomotoclon.translator.AnnouncementToAnnouncementDTOExtendedMapper;
 import org.example.otomotoclon.translator.AnnouncementToDTOMapper;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.naming.AuthenticationException;
 import java.io.IOException;
 import java.util.*;
 import java.util.stream.Collectors;
@@ -37,35 +35,42 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     private final DescriptionFileService descriptionFileService;
     private final AnnouncementToAnnouncementDTOExtendedMapper announcementToAnnouncementDToExtendedMapper;
     private final AnnouncementToDTOMapper announcementToDTOMapper;
+    private final AuthenticationService authenticationService;
 
     public AnnouncementServiceImpl(AnnouncementRepository announcementRepository,
                                    CarService carService,
                                    LocationService locationService,
                                    DescriptionFileService descriptionFileService,
                                    AnnouncementToAnnouncementDTOExtendedMapper announcementToAnnouncementDToExtendedMapper,
-                                   AnnouncementToDTOMapper announcementToDTOMapper) {
+                                   AnnouncementToDTOMapper announcementToDTOMapper,
+                                   AuthenticationService authenticationService) {
         this.announcementRepository = announcementRepository;
         this.carService = carService;
         this.locationService = locationService;
         this.descriptionFileService = descriptionFileService;
         this.announcementToAnnouncementDToExtendedMapper = announcementToAnnouncementDToExtendedMapper;
         this.announcementToDTOMapper = announcementToDTOMapper;
+        this.authenticationService = authenticationService;
     }
 
     @Transactional
     @Override
     public AnnouncementDTOExtended createAnnouncement(AnnouncementToSaveDTO announcementToSaveDTO,
-                                                      List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
+                                                      List<MultipartFile> images,
+                                                      String username) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
 
-        Announcement savedAnnouncement = saveAnnouncement(announcementToSaveDTO, images);
+        Announcement savedAnnouncement = saveAnnouncement(announcementToSaveDTO, images, username);
         return announcementToAnnouncementDToExtendedMapper.toDTOExtended(savedAnnouncement);
     }
 
     @Override
-    public void activeAnnouncement(long announcementId) throws ObjectDontExistInDBException{
+    public void activeAnnouncement(long announcementId, String username) throws ObjectDontExistInDBException, AuthenticationException {
         Optional<Announcement> announcement = announcementRepository.findById(announcementId);
         if(announcement.isEmpty()) {
             throw new ObjectDontExistInDBException("Announcement with id: " + announcementId + " does not exists");
+        }
+        if (!isAnnouncementBelongToUser(username, announcement.get())) {
+            throw new AuthenticationException("Announcement does not belong to user");
         }
         Announcement announcementToUpdate = announcement.get();
         announcementToUpdate.setActive(true);
@@ -74,11 +79,13 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Transactional
     @Override
-    public void deleteAnnouncement(long announcementId) throws ObjectDontExistInDBException{
-//        TODO: add check function to is the announcement belong to user
+    public void deleteAnnouncement(long announcementId, String username) throws ObjectDontExistInDBException, AuthenticationException {
         Announcement announcementToDelete = announcementRepository.findById(announcementId).orElseThrow(
                 () -> new ObjectDontExistInDBException("Announcement with id: " + announcementId + " does not exists")
         );
+        if (!isAnnouncementBelongToUser(username, announcementToDelete)) {
+            throw new AuthenticationException("Announcement does not belong to user");
+        }
         announcementRepository.delete(announcementToDelete);
         descriptionFileService.deleteDescriptionFile(announcementToDelete.getDescriptionUrl());
         carService.deleteCar(announcementToDelete.getCar());
@@ -86,11 +93,15 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     @Transactional
-    public AnnouncementDTOExtended updateAnnouncement(AnnouncementDTOExtended announcementDTOExtended, List<MultipartFile> newImages) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
-//        TODO: add check function to is the announcement belong to user
+    public AnnouncementDTOExtended updateAnnouncement(AnnouncementDTOExtended announcementDTOExtended,
+                                                      List<MultipartFile> newImages,
+                                                      String username) throws ObjectDontExistInDBException, InvalidFileExtension, IOException, AuthenticationException {
         Announcement announcementToUpdate = announcementRepository.findById(announcementDTOExtended.getId()).orElseThrow(
                 () -> new ObjectDontExistInDBException("Announcement with id: " + announcementDTOExtended.getId() + " does not exists")
         );
+        if (!isAnnouncementBelongToUser(username, announcementToUpdate)) {
+            throw new AuthenticationException("Announcement does not belong to user");
+        }
         Announcement updatedAnnouncement = updateAnnouncementFromDTO(announcementToUpdate, announcementDTOExtended, newImages);
 
         return announcementToAnnouncementDToExtendedMapper.toDTOExtended(updatedAnnouncement);
@@ -123,31 +134,25 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return filteredAnnouncements.stream().map(announcementToDTOMapper::toDTO).collect(Collectors.toList());
     }
 
-    private User setTestUser() {
-        User user = new User();
-        Role role = new Role();
-        Set<Role> roles = new HashSet<>();
-        role.setId(2l);
-        role.setName("user");
-        roles.add(role);
+    @Override
+    public List<AnnouncementDTO> getAnnouncementByUsername(String username) {
+//TODO: add function to get announcements by username
+        return null;
+    }
 
-        user.setId(1l);
-        user.setName("test");
-        user.setUsername("test");
-        user.setEmail("test@op.pl");
-        user.setPassword("123");
-        user.setRoles(roles);
-//TODO: delete this soon
-        return user;
+    private boolean isAnnouncementBelongToUser(String username, Announcement announcement) {
+        return announcement.getUser().getUsername().equals(username);
     }
 
     private Announcement saveAnnouncement(AnnouncementToSaveDTO announcementToSaveDTO,
-                                                     List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
-        Announcement announcementToSave = mapAnnouncementToSaveToAnnouncementEntity(announcementToSaveDTO, images);
+                                          List<MultipartFile> images,
+                                          String username) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
+        Announcement announcementToSave = mapAnnouncementToSaveToAnnouncementEntity(announcementToSaveDTO, images, username);
         return announcementRepository.save(announcementToSave);
     }
     private Announcement mapAnnouncementToSaveToAnnouncementEntity(AnnouncementToSaveDTO announcementToSaveDTO,
-                                                                   List<MultipartFile> images) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
+                                                                   List<MultipartFile> images,
+                                                                   String username) throws ObjectDontExistInDBException, InvalidFileExtension, IOException {
         Car car = carService.createCar(announcementToSaveDTO.getCarToSaveDTO(), images);
         Announcement announcement = new Announcement();
         announcement.setCar(car);
@@ -156,8 +161,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         announcement.setDescriptionUrl(descriptionUrl);
         announcement.setPrice(announcementToSaveDTO.getPrice());
         announcement.setLocation(locationService.getOrCreateLocationForAnnouncement(announcementToSaveDTO.getLocationDTO()));
-//        TODO: add user to announcement from JWT and delete function to add test user
-        announcement.setUser(setTestUser());
+        User user = authenticationService.getUserByUsername(username);
+        announcement.setUser(user);
         Date currentDate = new Date();
         announcement.setAddedDate(currentDate);
         announcement.setViews(0L);
@@ -179,6 +184,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 announcementDTOExtended.getDescriptionUrl(),
                 announcementToUpdate.getCar().getId()
         );
+        announcementToUpdate.setPrice(announcementDTOExtended.getPrice());
         announcementToUpdate.setDescriptionUrl(newDescriptionUrl);
         if (!locationService.compareLocationToLocationDTO(announcementToUpdate.getLocation(),
                 announcementDTOExtended.getLocationDTO())) {
