@@ -91,9 +91,22 @@ public class AnnouncementController {
         return ResponseEntity.ok(updatedAnnouncement);
     }
 
-    @GetMapping("/")
+    @GetMapping("/advance")
     public ResponseEntity<List<AnnouncementDTO>> getByAdvanceFilters (@RequestBody AnnouncementFilterRequest request) {
         List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByAdvanceFilters(request);
+        return ResponseEntity.ok(announcements);
+    }
+
+    @GetMapping("/")
+    public ResponseEntity<List<AnnouncementDTO>> getByBasicFilters (@RequestParam(required = false) String brand,
+                                                                    @RequestParam(required = false) String model,
+                                                                    @RequestParam(required = false) String generation,
+                                                                    @RequestParam(required = false,defaultValue = "1") int _page,
+                                                                    @RequestParam(required = false,defaultValue = "10") int _limit,
+                                                                    @RequestParam(required = false,defaultValue = "date") String _sort,
+                                                                    @RequestParam(required = false,defaultValue = "asc") String _order
+    ) {
+        List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByBasicFilters(brand, model, generation, _page, _limit, _sort, _order);
         return ResponseEntity.ok(announcements);
     }
 }

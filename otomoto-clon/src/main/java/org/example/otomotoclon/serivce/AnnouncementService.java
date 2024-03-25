@@ -17,4 +17,5 @@ public interface AnnouncementService {
     AnnouncementDTOExtended updateAnnouncement(AnnouncementDTOExtended announcementDTOExtended, List<MultipartFile> newImages) throws IOException;
     AnnouncementDTOExtended getAnnouncementById(long announcementId);
     List<AnnouncementDTO> getAnnouncementsByAdvanceFilters(AnnouncementFilterRequest request);
+    List<AnnouncementDTO> getAnnouncementsByBasicFilters(String brand, String model, String generation, int page, int limit, String sort, String order);
 }

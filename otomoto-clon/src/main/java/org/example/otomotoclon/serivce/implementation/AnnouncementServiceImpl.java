@@ -106,8 +106,20 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public List<AnnouncementDTO> getAnnouncementsByAdvanceFilters(AnnouncementFilterRequest request) {
-        List<Announcement> filteredAnnouncements = getAnnouncementsWithFilters(request);
+        List<Announcement> filteredAnnouncements = getAnnouncementsWithBasicFilters(request);
 
+        return filteredAnnouncements.stream().map(announcementToDTOMapper::toDTO).collect(Collectors.toList());
+    }
+
+    @Override
+    public List<AnnouncementDTO> getAnnouncementsByBasicFilters(String brand,
+                                                                String model,
+                                                                String generation,
+                                                                int page,
+                                                                int limit,
+                                                                String sort,
+                                                                String order) {
+        List<Announcement> filteredAnnouncements = getAnnouncementsWithBasicFilters(brand, model, generation, page, limit, sort, order);
         return filteredAnnouncements.stream().map(announcementToDTOMapper::toDTO).collect(Collectors.toList());
     }
 
@@ -176,7 +188,7 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return announcementToUpdate;
     }
 
-    private List<Announcement> getAnnouncementsWithFilters(AnnouncementFilterRequest request) {
+    private List<Announcement> getAnnouncementsWithBasicFilters(AnnouncementFilterRequest request) {
 
         CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
         CriteriaQuery<Announcement> query = criteriaBuilder.createQuery(Announcement.class);
@@ -206,6 +218,42 @@ public class AnnouncementServiceImpl implements AnnouncementService {
                 .getResultList();
     }
 
+    private List<Announcement> getAnnouncementsWithBasicFilters(String brand,
+                                                                String model,
+                                                                String generation,
+                                                                int page,
+                                                                int limit,
+                                                                String sort,
+                                                                String order) {
+
+        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Announcement> query = criteriaBuilder.createQuery(Announcement.class);
+        Root<Announcement> root = query.from(Announcement.class);
+
+        if(page <= 0) page = 1;
+        List<Predicate> predicates = prepareQuery(brand, model, generation, criteriaBuilder, root);
+
+        if(!order.isEmpty() && !sort.isEmpty()) {
+            String column = switch (sort) {
+                case "price" -> "price";
+                case "date" -> "addedDate";
+                default -> "views";
+            };
+            Order orderQuery;
+            if(order.equals("desc")) {
+                orderQuery = criteriaBuilder.desc(root.get(column));
+            } else {
+                orderQuery = criteriaBuilder.asc(root.get(column));
+            }
+            query.orderBy(orderQuery);
+        }
+        query.where(predicates.toArray(new Predicate[0]));
+        return entityManager.createQuery(query)
+                .setFirstResult((page - 1) * limit)
+                .setMaxResults(limit)
+                .getResultList();
+    }
+
     private List<Predicate> prepareQuery(AnnouncementFilterRequest request, CriteriaBuilder criteriaBuilder, Root<Announcement> root) {
         List<Predicate> predicates = new ArrayList<>();
 
@@ -223,6 +271,17 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         addDoorsPredicate(request.getDoorsMin(), request.getDoorsMax(), criteriaBuilder, root, predicates);
         addSeatsPredicate(request.getSeatsMin(), request.getSeatsMax(), criteriaBuilder, root, predicates);
         addTransmissionPredicate(request.getTransmission(), criteriaBuilder, root, predicates);
+        addIsActivePredicate(criteriaBuilder, root, predicates);
+
+        return predicates;
+    }
+
+    private List<Predicate> prepareQuery(String brand, String model, String generation, CriteriaBuilder criteriaBuilder, Root<Announcement> root) {
+        List<Predicate> predicates = new ArrayList<>();
+
+        addBrandPredicate(brand, criteriaBuilder, root, predicates);
+        addModelPredicate(model, brand, criteriaBuilder, root, predicates);
+        addGenerationPredicate(generation, model, criteriaBuilder, root, predicates);
         addIsActivePredicate(criteriaBuilder, root, predicates);
 
         return predicates;

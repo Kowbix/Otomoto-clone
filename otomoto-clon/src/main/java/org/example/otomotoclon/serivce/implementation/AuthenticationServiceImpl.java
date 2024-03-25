@@ -57,7 +57,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         user.setEmail(userRegisterDTO.getEmail());
         user.setPassword(passwordEncoder.encode(userRegisterDTO.getPassword()));
         Set<Role> roles = new HashSet<>();
-        Role role = roleRepository.findByName("user");
+        Role role = roleRepository.findByName("ROLE_USER");
         roles.add(role);
         user.setRoles(roles);
 

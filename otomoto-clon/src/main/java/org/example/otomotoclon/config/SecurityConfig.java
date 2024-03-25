@@ -4,6 +4,7 @@ import org.example.otomotoclon.security.JwtAuthenticationEntryPoint;
 import org.example.otomotoclon.security.JwtAuthenticationFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -32,6 +33,9 @@ public class SecurityConfig  {
 
         http.csrf((csrf) -> csrf.disable())
                 .authorizeHttpRequests((authorize) -> {
+                    authorize.requestMatchers("/api/v1/authentication/**").permitAll();
+                    authorize.requestMatchers(HttpMethod.GET, "/api/v1/announcement").permitAll();
+                    authorize.requestMatchers( "/api/v1/announcement").authenticated();
                     authorize.anyRequest().permitAll();
                 }).httpBasic(Customizer.withDefaults());
 
