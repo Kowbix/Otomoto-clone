@@ -135,9 +135,9 @@ public class AnnouncementServiceImpl implements AnnouncementService {
     }
 
     @Override
-    public List<AnnouncementDTO> getAnnouncementByUsername(String username) {
-//TODO: add function to get announcements by username
-        return null;
+    public List<AnnouncementDTO> getActiveAnnouncementByUsername(String username) {
+        List<Announcement> announcements = announcementRepository.findByIsActiveAndUserUsername(true, username);
+        return announcements.stream().map(announcementToDTOMapper::toDTO).collect(Collectors.toList());
     }
 
     private boolean isAnnouncementBelongToUser(String username, Announcement announcement) {

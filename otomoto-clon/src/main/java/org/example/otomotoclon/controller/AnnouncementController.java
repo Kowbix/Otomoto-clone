@@ -117,4 +117,11 @@ public class AnnouncementController {
         List<AnnouncementDTO> announcements = announcementService.getAnnouncementsByBasicFilters(brand, model, generation, _page, _limit, _sort, _order);
         return ResponseEntity.ok(announcements);
     }
+
+    @GetMapping("/user-active-announcements")
+    public ResponseEntity<List<AnnouncementDTO>> getActiveAnnouncementsByLoggedInUser() {
+        String username = SecurityContextHolder.getContext().getAuthentication().getName();
+        List<AnnouncementDTO> announcements = announcementService.getActiveAnnouncementByUsername(username);
+        return ResponseEntity.ok(announcements);
+    }
 }

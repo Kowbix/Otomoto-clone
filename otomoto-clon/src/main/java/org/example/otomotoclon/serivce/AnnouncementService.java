@@ -19,5 +19,5 @@ public interface AnnouncementService {
     AnnouncementDTOExtended getAnnouncementById(long announcementId);
     List<AnnouncementDTO> getAnnouncementsByAdvanceFilters(AnnouncementFilterRequest request);
     List<AnnouncementDTO> getAnnouncementsByBasicFilters(String brand, String model, String generation, int page, int limit, String sort, String order);
-    List<AnnouncementDTO> getAnnouncementByUsername(String username);
+    List<AnnouncementDTO> getActiveAnnouncementByUsername(String username);
 }

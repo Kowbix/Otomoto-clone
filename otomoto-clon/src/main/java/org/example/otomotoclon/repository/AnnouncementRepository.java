@@ -3,6 +3,7 @@ package org.example.otomotoclon.repository;
 import org.example.otomotoclon.entity.Announcement;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -13,6 +14,8 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
 
     @Query(nativeQuery = true, value = "SELECT count(*) from announcements where is_active is true")
     long countActiveAnnouncement();
-    List<Announcement> findAnnouncementsByUserId(long userId);
+
+    @Query("SELECT a FROM Announcement a JOIN a.user u WHERE a.isActive = :isActive AND u.username = :username")
+    List<Announcement> findByIsActiveAndUserUsername(@Param("isActive") boolean isActive, @Param("username")  String username);
     Optional<Announcement> findAnnouncementByCarId(long carId);
 }
