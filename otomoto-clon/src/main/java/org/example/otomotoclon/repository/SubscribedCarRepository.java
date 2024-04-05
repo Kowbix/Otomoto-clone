@@ -11,4 +11,5 @@ public interface SubscribedCarRepository extends JpaRepository<SubscribedCar, Lo
 
     boolean existsByBrandNameAndModelNameAndGenerationNameAndUserUsername(String brand, String model, String generation, String username);
     List<SubscribedCar> findByUserUsername(String username);
+    List<SubscribedCar> findByBrandNameAndModelNameAndGenerationName(String brand, String model, String generation);
 }
