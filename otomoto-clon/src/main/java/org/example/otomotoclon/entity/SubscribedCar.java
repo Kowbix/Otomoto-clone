@@ -19,27 +19,27 @@ public class SubscribedCar {
     private long id;
     @ManyToOne(
             optional = false,
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH
     )
     @JoinColumn(name = "brand_id")
     private Brand brand;
     @ManyToOne(
             optional = false,
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH
     )
     @JoinColumn(name = "model_id")
     private Model model;
     @ManyToOne(
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH
     )
     @JoinColumn(name = "generation_id")
     private Generation generation;
     @ManyToOne(
             optional = false,
-            fetch = FetchType.LAZY,
+            fetch = FetchType.EAGER,
             cascade = CascadeType.DETACH
     )
     @JoinColumn(name = "user_id")

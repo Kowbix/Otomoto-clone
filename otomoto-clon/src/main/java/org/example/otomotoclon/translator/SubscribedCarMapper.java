@@ -21,7 +21,8 @@ public interface SubscribedCarMapper {
             @Mapping(target = "id", source = "id"),
             @Mapping(target = "brand", source = "brand.name"),
             @Mapping(target = "model", source = "model.name"),
-            @Mapping(target = "generation", source = "generation.name")
+            @Mapping(target = "generation", source = "generation.name"),
+            @Mapping(target = "userEmail", source = "user.email")
     })
     SubscribedCarDTOExtended toDTOExtended(SubscribedCar subscribedCar);
 }

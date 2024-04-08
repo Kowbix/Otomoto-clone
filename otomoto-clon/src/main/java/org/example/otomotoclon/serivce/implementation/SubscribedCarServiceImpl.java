@@ -61,16 +61,8 @@ public class SubscribedCarServiceImpl implements SubscribedCarService {
     }
 
     @Override
-    public List<SubscribedCar> getSubscriptionsBySubscribedCarDTO(SubscribedCarDTO subscribedCarDTO) {
-        List<SubscribedCar> subscribedCars = getSubscriptionsByCarInfo(subscribedCarDTO);
-        return subscribedCars;
-    }
-
-    private List<SubscribedCar> getSubscriptionsByCarInfo(SubscribedCarDTO subscribedCarDTO) {
-        String brand = subscribedCarDTO.getBrand();
-        String model = subscribedCarDTO.getModel();
-        String generation = subscribedCarDTO.getGeneration();
-        return subscribedCarRepository.findByBrandNameAndModelNameAndGenerationName(brand, model, generation);
+    public List<SubscribedCar> getAllSubscribedCar() {
+        return subscribedCarRepository.findAll();
     }
 
     private boolean isExistsSubscription(String username, SubscribedCarDTO subscribedCarDTO) {

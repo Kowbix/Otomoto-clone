@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <style>
+        body {
+            margin: 0;
+        }
+        .logo {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+        }
+
+        .box {
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .content {
+            text-align: center;
+        }
+
+        .cotainer {
+            padding: 0 10%;
+            width: 100%;
+            max-width: 900px;
+        }
+
+        .announcement {
+            padding: 1%;
+            display: flex;
+            width: 100%;
+            max-height: 20%;
+            border: 1px solid rgb(190, 188, 188);
+            margin-bottom: 3%;
+            border-radius: 5px;
+            background-color: rgb(232, 239, 254);
+        }
+
+        .main-image {
+            width: 30%;
+            height: 100%;
+            overflow: hidden;
+            text-align: center;
+            border-radius: 5px;
+        }
+
+        .main-image img {
+            width: auto;
+            max-width: 100%;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .car {
+            margin-left: 5%;
+            width: 70%;
+            height: 100%;
+        }
+        .car-title {
+            margin: 0 0 0 5%;
+            padding: 0;
+            text-align: left;
+            width: 100%;
+        }
+        .car-info {
+            width: 100%;
+        }
+
+        .car-info-row {
+            display: flex;
+
+        }
+
+        .information {
+            width: 30%;
+            margin-left: 5%;
+        }
+
+        .btn-announcement {
+            text-align: center;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #11cc4f;
+            width: 70%;
+            height: 100%;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+        }
+        @media only screen and (min-width: 600px) {
+            .announcement {
+                flex-direction: row;
+                align-items: center;
+            }
+
+            .main-image {
+                flex-basis: 40%;
+                margin-right: 20px;
+            }
+
+            .car {
+                flex-basis: 60%;
+            }
+
+            .information {
+                flex-basis: 48%;
+            }
+        }
+
+    </style>
+</head>
+<body>
+<div class="logo">
+    <img src="data:image/png;base64,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" alt="OTOMOTO">
+</div>
+<div class="box">
+    <div class="cotainer">
+        <div class="content">
+            <h2>New announcements</h2>
+        </div>
+        <div class="announcement" th:each="announcement : ${announcements}" >
+            <div class="main-image">
+                <img th:src="${announcement.mainImageUrl}">
+            </div>
+            <div class="car">
+                <div class="car-title">
+                    <h3 th:text="${announcement.car.getBrand() + ' ' + announcement.car.getModel() + ' ' + announcement.car.getGeneration()}"></h3>
+                </div>
+                <div class="car-info">
+                    <div class="car-info-row">
+                        <div class="information">
+                            <p><b>Price:</b> <span th:text="${announcement.getPrice}"></span> tyś. zł</p>
+                        </div>
+                        <div class="information">
+                            <p><b>Millage:</b> <span th:text="${announcement.getCar().getMillage()}"></span></p>
+                        </div>
+                        <div class="information">
+                            <p><b>Year:</b> <span th:text="${announcement.getCar().getYearProduction()}"></span></p>
+                        </div>
+                    </div>
+                    <div class="car-info-row">
+                        <div class="information">
+                            <p><b>Fuel:</b> <span th:text="${announcement.getCar().getFuel()}"></span></p>
+                        </div>
+                        <div class="information">
+                            <p><b>Horsepower:</b> <span th:text="${announcement.getCar().getHorsepower()}"></span></p>
+                        </div>
+                        <div class="information">
+                            <a th:href="@{http://localhost:8080/api/v1/announcement/{id}(id=${announcement.id})}" class="btn-announcement">CHECK</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

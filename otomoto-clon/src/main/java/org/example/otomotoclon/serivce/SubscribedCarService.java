@@ -12,5 +12,6 @@ public interface SubscribedCarService {
     void subscribeCar(String username, SubscribedCarDTO subscribedCarDTO);
     void unsubscribeCar(long id, String username) throws AuthenticationException;
     List<SubscribedCarDTOExtended> getSubscriptionsByUsername(String username);
-    List<SubscribedCar> getSubscriptionsBySubscribedCarDTO(SubscribedCarDTO subscribedCarDTO);
+    List<SubscribedCar> getAllSubscribedCar();
+
 }

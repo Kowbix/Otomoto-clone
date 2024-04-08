@@ -3,11 +3,13 @@ package org.example.otomotoclon.serivce;
 import org.example.otomotoclon.dto.announcement.AnnouncementDTO;
 import org.example.otomotoclon.dto.announcement.AnnouncementDTOExtended;
 import org.example.otomotoclon.dto.announcement.AnnouncementToSaveDTO;
+import org.example.otomotoclon.entity.Announcement;
 import org.example.otomotoclon.request.AnnouncementFilterRequest;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.naming.AuthenticationException;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 
 public interface AnnouncementService {
@@ -20,4 +22,5 @@ public interface AnnouncementService {
     List<AnnouncementDTO> getAnnouncementsByAdvanceFilters(AnnouncementFilterRequest request);
     List<AnnouncementDTO> getAnnouncementsByBasicFilters(String brand, String model, String generation, int page, int limit, String sort, String order);
     List<AnnouncementDTO> getActiveAnnouncementByUsername(String username);
+    List<AnnouncementDTO> getAnnouncementsByAddedDateAndCarInfo(Date addedDate, String brand, String model, String generation);
 }

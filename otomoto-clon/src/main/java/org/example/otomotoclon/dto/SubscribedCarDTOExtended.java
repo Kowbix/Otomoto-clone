@@ -12,4 +12,5 @@ public class SubscribedCarDTOExtended {
     private String brand;
     private String model;
     private String generation;
+    private String userEmail;
 }
