@@ -1,6 +1,6 @@
 # Otomoto-clone
 
-# Polish Version
+## Polish Version
 
 Projekt Aplikacji Ogłoszeniowej jest klonem popularnego serwisu ogłoszeniowego Otomoto, który umożliwia użytkownikom dodawanie, przeglądanie i subskrybowanie ogłoszeń dotyczących samochodów. Aplikacja została zbudowana w języku Java z wykorzystaniem technologii Spring Boot, Spring Security, Hibernate oraz PostgreSQL.
 
@@ -11,6 +11,7 @@ Projekt Aplikacji Ogłoszeniowej jest klonem popularnego serwisu ogłoszeniowego
 - Automatyczne wysyłanie maili z nowymi ofertami dla subskrybentów
 - Zarządzanie ogłoszeniami przez użytkowników oraz administratora
 - Integracja z AWS S3 do przechowywania zdjęć i opisów ogłoszeń
+- Wyszukiwanie ogłoszeń na podstawie wielu filtrów
 
 ### Wymagania Systemowe
 
@@ -28,7 +29,7 @@ Projekt Aplikacji Ogłoszeniowej jest klonem popularnego serwisu ogłoszeniowego
 4. Skonfiguruj dostęp do konta AWS S3 w pliku `application.properties`
 5. Skonfiguruj dostęp do serwera mailowego w pliku `application.properties`
 
-# English Version
+## English Version
 
 The Classifieds Application Project is a clone of the popular classified ads service Otomoto, which allows users to add, browse, and subscribe to car advertisements. The application is built in Java using Spring Boot, Spring Security, Hibernate, and PostgreSQL technologies.
 
@@ -39,6 +40,7 @@ The Classifieds Application Project is a clone of the popular classified ads ser
 - Automatic email sending with new offers for subscribers
 - Managing advertisements by users and administrators
 - Integration with AWS S3 for storing advertisement images and descriptions
+- Searching for advertisements based on multiple filters
 
 ### System Requirements
 
