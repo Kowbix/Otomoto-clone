@@ -36,8 +36,7 @@ public class NotificationSubscribedCarServiceImpl implements NotificationSubscri
     }
 
     @Override
-//    @Scheduled(cron = "0 12 22 * * *")
-    @Scheduled(fixedRate = 200000)
+    @Scheduled(cron = "0 0 10 * * *")
     public void sendEmailsWithNewAnnouncementsToSubscribers() {
         List<SubscribedCar> subscriptions = subscribedCarService.getAllSubscribedCar();
         Date yesterday = getYesterdayDate();
