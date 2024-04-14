@@ -151,6 +151,21 @@ public class AnnouncementServiceImpl implements AnnouncementService {
         return announcements.stream().map(announcementToDTOMapper::toDTO).collect(Collectors.toList());
     }
 
+    @Override
+    public List<Object[]> getQuantityOfAnnouncementsByDate(Date from, Date to) {
+        return announcementRepository.countAnnouncementsByDate(from, to);
+    }
+
+    @Override
+    public List<Object[]> getQuantityOfAnnouncementsByBrandAndDate(String brand, Date from, Date to) {
+        return announcementRepository.countAnnouncementsByBrandAndDate(brand, from, to);
+    }
+
+    @Override
+    public List<Announcement> getAnnouncementsByDates(Date from, Date to) {
+        return announcementRepository.findAnnouncementsByDate(from, to);
+    }
+
     private boolean isAnnouncementBelongToUser(String username, Announcement announcement) {
         return announcement.getUser().getUsername().equals(username);
     }

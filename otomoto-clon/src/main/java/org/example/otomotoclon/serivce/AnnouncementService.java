@@ -23,4 +23,7 @@ public interface AnnouncementService {
     List<AnnouncementDTO> getAnnouncementsByBasicFilters(String brand, String model, String generation, int page, int limit, String sort, String order);
     List<AnnouncementDTO> getActiveAnnouncementByUsername(String username);
     List<AnnouncementDTO> getAnnouncementsByAddedDateAndCarInfo(Date addedDate, String brand, String model, String generation);
+    List<Announcement> getAnnouncementsByDates(Date from, Date to);
+    List<Object[]> getQuantityOfAnnouncementsByDate(Date from, Date to);
+    List<Object[]> getQuantityOfAnnouncementsByBrandAndDate(String brand, Date from, Date to);
 }

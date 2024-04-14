@@ -26,4 +26,13 @@ public interface AnnouncementRepository extends JpaRepository<Announcement, Long
 
     @Query("SELECT a FROM Announcement a WHERE a.isActive = true AND a.addedDate = :date AND a.car.brand.name = :brand AND  a.car.model.name = :model")
     List<Announcement> findActiveByAddedDateAndCarInfo(Date date, String brand, String model);
+
+    @Query("SELECT a.car.brand.name, COUNT(a) FROM Announcement a WHERE a.addedDate BETWEEN :from AND :to GROUP BY a.car.brand.name")
+    List<Object[]> countAnnouncementsByDate(Date from, Date to);
+
+    @Query("SELECT a.car.model.name, COUNT(a) FROM Announcement a WHERE a.car.brand.name = :brand AND a.addedDate BETWEEN :from AND :to GROUP BY a.car.model.name")
+    List<Object[]> countAnnouncementsByBrandAndDate(String brand, Date from, Date to);
+
+    @Query("SELECT a FROM Announcement a WHERE a.addedDate BETWEEN :from AND :to")
+    List<Announcement> findAnnouncementsByDate(Date from, Date to);
 }

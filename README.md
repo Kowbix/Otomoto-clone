@@ -12,6 +12,7 @@ Projekt Aplikacji Ogłoszeniowej jest klonem popularnego serwisu ogłoszeniowego
 - Zarządzanie ogłoszeniami przez użytkowników oraz administratora
 - Integracja z AWS S3 do przechowywania zdjęć i opisów ogłoszeń
 - Wyszukiwanie ogłoszeń na podstawie wielu filtrów
+- Generowanie raportów w postaci plików csv oraz map 
 
 ### Wymagania Systemowe
 
@@ -41,6 +42,7 @@ The Classifieds Application Project is a clone of the popular classified ads ser
 - Managing advertisements by users and administrators
 - Integration with AWS S3 for storing advertisement images and descriptions
 - Searching for advertisements based on multiple filters
+- Generate reports as a csv files and collections map
 
 ### System Requirements
 
