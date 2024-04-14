@@ -38,6 +38,7 @@ public class SecurityConfig  {
                     authorize.requestMatchers(HttpMethod.GET, "/api/v1/announcement/**").permitAll();
                     authorize.requestMatchers( "/api/v1/announcement/**").authenticated();
                     authorize.requestMatchers("/api/v1/subscribe-car/**").authenticated();
+                    authorize.requestMatchers("/api/v1/report/**").hasRole("ADMIN");
                     authorize.requestMatchers(HttpMethod.POST).hasRole("ADMIN");
                     authorize.anyRequest().permitAll();
                 }).httpBasic(Customizer.withDefaults());
