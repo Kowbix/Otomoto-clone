@@ -42,11 +42,11 @@ public class ReportServiceImpl implements ReportService {
     public Resource generateAnnouncementsCSVReportByDate(Date from, Date to) throws IOException {
         if (to == null) to = new Date();
         List<Announcement> announcements = announcementService.getAnnouncementsByDates(from, to);
-        byte[] reportData = generateCSV(announcements);
+        byte[] reportData = generateAnnouncementsCSV(announcements);
         return new ByteArrayResource(reportData);
     }
 
-    private byte[] generateCSV(List<Announcement> announcements) throws IOException {
+    private byte[] generateAnnouncementsCSV(List<Announcement> announcements) throws IOException {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         try (CSVFileManager fileManager = new CSVFileManager(outputStream)) {
             fileManager.writeHeader("Id", "Email", "Is active","Date", "Brand", "Model", "Generation", "Price", "Year", "Vin");
