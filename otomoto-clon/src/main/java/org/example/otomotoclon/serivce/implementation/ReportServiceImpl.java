@@ -10,8 +10,6 @@ import org.springframework.stereotype.Service;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -46,7 +44,6 @@ public class ReportServiceImpl implements ReportService {
         List<Announcement> announcements = announcementService.getAnnouncementsByDates(from, to);
         byte[] reportData = generateCSV(announcements);
         return new ByteArrayResource(reportData);
-//        return new ByteArrayResource(reportData, getFilenameToReport("announcementsByDate.csv"));
     }
 
     private byte[] generateCSV(List<Announcement> announcements) throws IOException {
